@@ -1,8 +1,5 @@
 #!/bin/sh -eu
 
-# Change root password
-echo "root:$RETRO_ROOT_PASSWD" | chpasswd
-
 # Prepare pub directory
 mkdir -p /srv/pub
 chmod 1777 /srv/pub
