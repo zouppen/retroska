@@ -28,3 +28,7 @@ sudo podman run --hostname retroska --cap-add AUDIT_CONTROL -ti testi
 **TODO** network configuration.
 
 **TODO** add convincing arguments to calm down container purits who are against systemd.
+
+## Contributing
+
+Please contribute to my design paper: https://demo.hedgedoc.org/3Ev8GPbVTQWT_pdJOudFNQ#
