@@ -20,7 +20,7 @@ To build and run:
 
 ```
 sudo podman build -t testi .
-sudo podman run --hostname retroska --cap-add AUDIT_CONTROL -ti testi
+sudo podman run --hostname retroska --cap-add AUDIT_CONTROL -e RETRO_WORKGROUP=RETRO -ti testi
 ```
 
 **TODO** better instructions.
