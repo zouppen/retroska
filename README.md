@@ -7,9 +7,9 @@ such as:
 * Samba (Windows for Workgroups 3.11 compatible)
 * IRC
 
-And some modern ones:
+## Roadmap
 
-* SFTP
+See issues for planned features.
 
 ## Installation
 
@@ -19,15 +19,26 @@ inside the container.
 To build and run:
 
 ```
-sudo podman build -t testi .
-sudo podman run --hostname retroska --cap-add AUDIT_CONTROL -e RETRO_WORKGROUP=RETRO -ti testi
+podman build -t testi .
+podman run --hostname retroska --cap-add AUDIT_CONTROL -e RETRO_WORKGROUP=RETRO -ti testi
 ```
 
 **TODO** better instructions.
 
 **TODO** network configuration.
 
-**TODO** add convincing arguments to calm down container purits who are against systemd.
+## Architecture
+
+Instead of more complex orchestration I've chosen to implement this as
+monolithic container using Podman and systemd. Systemd does good job
+in monitoring process status and in this case I don't even want heavy
+separation of services since for example files are shared multiple
+ways: FTP, Samba among others.
+
+NB. I'm open for good tips how to use the force of Podman more
+efficiently but don't want to listen to any rants about using systemd
+with containers (or without).
+[There are good arguments on RedHat site](https://developers.redhat.com/blog/2019/04/24/how-to-run-systemd-in-a-container#enter_podman).
 
 ## Contributing
 
