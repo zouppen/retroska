@@ -1,0 +1,19 @@
+#!/bin/sh -eu
+
+# Make sure we never fail since inotify stops then
+{
+    # First change modes since this avoid setuid attack.
+    if test -d "$1"; then
+	# When directory.
+	chmod "$WANTED_PERM_DIR" "$1"
+    elif test -f "$1"; then
+	# Regular files
+	chmod "$WANTED_PERM_FILE" "$1"
+    else
+	# Something we don't want to touch (device, FIFO etc)
+	echo "Suspicious file $1"
+	exit 0
+    fi
+    # Then we change the permissions
+    chown "$WANTED_OWNER" "$1"
+} || true 

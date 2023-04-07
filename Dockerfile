@@ -9,6 +9,9 @@ RUN apt-get -y install --no-install-recommends tcpdump iproute2 less net-tools s
 RUN apt-get -y install --no-install-recommends nano
 RUN apt-get -y install --no-install-recommends ncftp
 
+# Move these to deps script later
+RUN apt-get -y install --no-install-recommends inotify-tools
+
 # Volume for public shares and other permanent storage
 VOLUME "/mnt"
 

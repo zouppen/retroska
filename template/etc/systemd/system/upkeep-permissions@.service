@@ -1,0 +1,14 @@
+[Unit]
+Description=Upkeep incoming directory permissions
+
+[Service]
+Type=simple
+User=root
+Group=root
+EnvironmentFile=/etc/upkeep_permissions/%I.conf
+ExecStart=/opt/upkeep_permissions
+Restart=always
+RestartSec=1min
+
+[Install]
+WantedBy=multi-user.target
