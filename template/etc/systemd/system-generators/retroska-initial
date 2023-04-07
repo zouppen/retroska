@@ -1,5 +1,12 @@
 #!/bin/sh -eu
 
+fqdn="$(hostname).retroska"
+
+# Generate passwords if not provided
+if test -z "${RETRO_IRC_PW+x}"; then
+    export RETRO_IRC_PW=`pwgen -B 8`
+fi
+
 # Prepare pub directory
 mkdir -p /mnt/srv/pub /mnt/srv/incoming /mnt/conf
 rmdir /srv/ftp || true
@@ -12,12 +19,41 @@ cat >/etc/samba/smb.user.conf <<EOF
 workgroup = ${RETRO_WORKGROUP-WORKGROUP}
 EOF
 
-# Create initial banner
+# Create initial banner used by FTP and many others
 if ! test -e /mnt/conf/banner.txt; then
-    echo "Welcome to $(hostname)" >/mnt/conf/banner.txt
+    cat >/mnt/conf/banner.txt <<EOF
+Welcome to $fqdn!
+
+The server is operated by ${RETRO_ADMIN-Anonymous}
+and it's located in ${RETRO_LOCATION-unknown location}.
+
+To contact the admin, send e-mail to ${RETRO_EMAIL-unknown@example.com}
+
+EOF
 fi
 
-#if test "${RETRO_WORKGROUP+x}"; then
+# IRC configuration
+mkdir -p /etc/ngircd/conf.d
+cat >/etc/ngircd/conf.d/user.conf <<EOF
+[Global]
+Name = $fqdn
+AdminInfo1 = ${RETRO_ADMIN-Anonymous}
+AdminInfo2 = ${RETRO_LOCATION-Unknown}
+AdminEMail = ${RETRO_EMAIL-unknown@example.com}
+Info = Retroska IRC server operated by ${RETRO_ADMIN-Anonymous}
+
+[Operator]
+# ID of the operator (may be different of the nickname)
+Name = operator
+Password = ${RETRO_IRC_PW}
+EOF
+
+# Generate summary of passwords
+cat >/root/credentials.txt <<EOF
+Initial passwords:
+
+IRC: operator / ${RETRO_IRC_PW}
+EOF
 
 # Remove me after running
 rm "$0"

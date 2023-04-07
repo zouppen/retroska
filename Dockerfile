@@ -11,6 +11,8 @@ RUN apt-get -y install --no-install-recommends ncftp
 
 # Move these to deps script later
 RUN apt-get -y install --no-install-recommends inotify-tools
+RUN apt-get -y install --no-install-recommends pwgen
+RUN apt-get -y install --no-install-recommends irssi
 
 # Volume for public shares and other permanent storage
 VOLUME "/mnt"
