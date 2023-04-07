@@ -6,6 +6,7 @@ Type=simple
 User=root
 Group=root
 EnvironmentFile=/etc/upkeep_permissions/%I.conf
+ExecStartPre=/opt/fix_old_permissions
 ExecStart=/opt/upkeep_permissions
 Restart=always
 RestartSec=1min

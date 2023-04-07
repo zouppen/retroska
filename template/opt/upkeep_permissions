@@ -1,7 +1,7 @@
 #!/bin/sh -eu
 #
 # Run from systemd, passing WANTED_PERM_DIR, WANTED_PERM_FILE, and
-# WANTED_OWNER to fix_file_permission
+# WANTED_OWNER to fix_file_permission.
 #
 # If the file name contains newline (\n) this fails due to the
 # limitation in inotifywait.
