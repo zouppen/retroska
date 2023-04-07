@@ -2,7 +2,7 @@
 
 # Prepare pub directory
 mkdir -p /mnt/srv/pub /mnt/srv/incoming /mnt/conf
-rmdir -p /srv/ftp
+rmdir /srv/ftp || true
 chmod 0775 /mnt/srv/pub
 chmod 0777 /mnt/srv/incoming
 
