@@ -10,6 +10,9 @@ RUN apt-get -y install systemd-sysv apt-utils
 RUN apt-get -y install --no-install-recommends samba vsftpd ngircd inotify-tools pwgen yq
 RUN apt-get clean
 
+# Enable some services
+RUN systemctl enable systemd-networkd
+
 # Not strictly needed but helps debugging
 RUN apt-get -y install --no-install-recommends tcpdump iproute2 net-tools smbclient
 RUN apt-get -y install --no-install-recommends nano less
