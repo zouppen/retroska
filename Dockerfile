@@ -1,8 +1,11 @@
-FROM quay.io/official-images/debian
+FROM quay.io/official-images/debian:bullseye
 
 # Install packages
-ADD template/root/retroska/deps.sh /root/retroska/
-RUN /root/retroska/deps.sh
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get -y install systemd-sysv apt-utils
+RUN apt-get -y install --no-install-recommends samba vsftpd ngircd inotify-tools pwgen
+RUN apt-get clean
 
 # Add some tools for humans
 RUN apt-get -y install --no-install-recommends tcpdump iproute2 less net-tools smbclient
@@ -10,8 +13,6 @@ RUN apt-get -y install --no-install-recommends nano
 RUN apt-get -y install --no-install-recommends ncftp
 
 # Move these to deps script later
-RUN apt-get -y install --no-install-recommends inotify-tools
-RUN apt-get -y install --no-install-recommends pwgen
 RUN apt-get -y install --no-install-recommends irssi
 
 # Volume for public shares and other permanent storage
