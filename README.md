@@ -20,12 +20,44 @@ To build and run:
 
 ```
 podman build -t testi .
-podman run --hostname retroska --cap-add AUDIT_CONTROL -e RETRO_WORKGROUP=RETRO -ti testi
+podman run --hostname retroska --cap-add AUDIT_CONTROL,NET_ADMIN,NET_RAW --network=ns:/run/netns/retro -e RETRO_WORKGROUP=RETRO -ti testi
 ```
 
 **TODO** better instructions.
 
-**TODO** network configuration.
+### Setting up network namespaces
+
+We need at least the seggregated network for vintage computers (so
+called retro network) but you might like the ability to connect to the
+Internet as well, so adding another network is advised.
+
+There are multiple ways to do this. If you have a bridge already and
+have Podman 4, consider it by using `--network` switch multiple times
+in `podman run`. Since I'm still stuck with Podman 3, here are the
+instructions for it.
+
+In the following example `retro` is the name of the namespace and
+`ethX` is the name of the physical (or VLAN) interface which you want
+to be the designated retro network.
+
+```sh
+ip netns add retro
+ip link set netns retro dev retro
+ip link set netns retro dev ethX
+```
+
+Also, Internet needs to be provided to the container if you want the
+retro network to be able to connect to the external world. You can use
+bridge but for simple cases `slirp4netns` is easy enough. Let's launch it:
+
+```sh
+slirp4netns -c --netns-type=path /run/netns/retro internet
+```
+
+Make a script for them since they'll disappear every boot.
+
+**TODO** Provide systemd network and service for them and/or Podman 4
+instructions.
 
 ## Architecture
 
