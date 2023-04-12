@@ -1,0 +1,2 @@
+#!/bin/sh -eu
+sed -re 's/^/#/;s/^#[^#][^,]*,([^,]*),([a-z0-9.-]*)$/\1 \2/' /mnt/conf/dhcp-static.conf >/run/dnsmasq/local_hosts

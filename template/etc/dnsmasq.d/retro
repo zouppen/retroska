@@ -1,0 +1,2 @@
+interface=retro
+dhcp-range=10.110.0.100,10.110.0.200,2d

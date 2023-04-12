@@ -48,6 +48,13 @@ Name = operator
 Password = ${RETRO_IRC_PW}
 EOF
 
+# DHCP static leases
+if ! test -e /mnt/conf/dhcp-static.conf; then
+    cat >/mnt/conf/dhcp-static.conf <<EOF
+#mac,ip,hostname
+EOF
+fi
+
 # Generate summary of passwords
 cat >/root/credentials.txt <<EOF
 Initial passwords:

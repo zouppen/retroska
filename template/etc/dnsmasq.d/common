@@ -1,0 +1,5 @@
+# Static IP addresses file
+dhcp-hostsfile=/mnt/conf/dhcp-static.conf
+
+# Runtime generated list of hosts
+addn-hosts=/run/dnsmasq/local_hosts
