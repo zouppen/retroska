@@ -1,0 +1,1 @@
+../mnt/conf/bash_history_root
