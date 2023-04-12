@@ -1,10 +1,13 @@
 FROM quay.io/official-images/debian:bullseye
 
+# Ensure we have all necessary apt configs
+COPY --chown=root:root template/etc/apt /etc/apt
+
 # Install packages
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get -y install systemd-sysv apt-utils
-RUN apt-get -y install --no-install-recommends samba vsftpd ngircd inotify-tools pwgen
+RUN apt-get -y install --no-install-recommends samba vsftpd ngircd inotify-tools pwgen yq
 RUN apt-get clean
 
 # Not strictly needed but helps debugging
