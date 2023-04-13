@@ -27,7 +27,7 @@ podman run --hostname retroska --cap-add AUDIT_CONTROL,NET_ADMIN,NET_RAW --netwo
 
 ### Setting up network namespaces
 
-We need at least the seggregated network for vintage computers (so
+We need at least the segregated network for vintage computers (so
 called retro network) but you might like the ability to connect to the
 Internet as well, so adding another network is advised.
 
