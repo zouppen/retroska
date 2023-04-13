@@ -16,6 +16,7 @@ chmod 0777 /mnt/srv/incoming
 cat >/etc/samba/smb.user.conf <<EOF
 [global]
 workgroup = ${RETRO_WORKGROUP-WORKGROUP}
+server string = Retroska operated by ${RETRO_ADMIN-Anonymous}
 EOF
 
 # Create initial banner used by FTP and many others
