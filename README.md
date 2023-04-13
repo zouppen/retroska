@@ -36,18 +36,32 @@ have Podman 4, consider it by using `--network` switch multiple times
 in `podman run`. Since I'm still stuck with Podman 3, here are the
 instructions for it.
 
-In the following example `retro` is the name of the namespace and
-`ethX` is the name of the physical (or VLAN) interface which you want
-to be the designated retro network.
+You need one Ethenet interface for the private retro computer
+network. It can be either physical Ethernet adapter or VLAN.  The
+interface must be called `retro` for it to work with routing and DHCP,
+so first we're doing renaming.
+
+In case you are running systemd-networkd on the host or some other
+facility which allows you to set custom permanent names for
+interfaces, I suggest you to call the private retro computer network
+`retro`. If not, then you can rename it temporarily by running:
 
 ```sh
+ip link set name retro dev OLD_NAME
+```
+
+In the following example `retro` is used for both the namespace and
+the Ethernet interface. To create the namespace and move the interface
+there, run:
+
+```sh
+ip link set name retro dev ethX
 ip netns add retro
 ip link set netns retro dev retro
-ip link set netns retro dev ethX
 ```
 
 Also, Internet needs to be provided to the container if you want the
-retro network to be able to connect to the external world. You can use
+retro computers to be able to connect to the external world. You can use
 bridge but for simple cases `slirp4netns` is easy enough. Let's launch it:
 
 ```sh
