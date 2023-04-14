@@ -11,4 +11,4 @@ EOF
 fi
 
 CONTAINER_PID="$(podman container inspect --format '{{.State.Pid}}' "${2---latest}")"
-sudo ip link set netns "$CONTAINER_PID" dev "$1" 
+sudo ip link set netns "$CONTAINER_PID" name retro dev "$1" 
