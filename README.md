@@ -27,51 +27,42 @@ podman run --hostname retroska --cap-add AUDIT_CONTROL,NET_ADMIN,NET_RAW --netwo
 
 ### Setting up network namespaces
 
-We need at least the segregated network for vintage computers (so
-called retro network) but you might like the ability to connect to the
-Internet as well, so adding another network is advised.
+The bare minimum is a physical Ethernet adapter or VLAN interface to
+your vintage network. It is advised to be a segregated network without
+modern computers or especially IoT appliances for security reasons.
 
-There are multiple ways to do this. If you have a bridge already and
-have Podman 4, consider it by using `--network` switch multiple times
-in `podman run`. Since I'm still stuck with Podman 3, here are the
-instructions for it.
+Internet access inside the container is optional but practical; it
+allows reaching online FTP servers and connecting multiple Retroskas
+together for a larger LAN party.
 
-You need one Ethenet interface for the private retro computer
-network. It can be either physical Ethernet adapter or VLAN.  The
-interface must be called `retro` for it to work with routing and DHCP,
-so first we're doing renaming.
+There are multiple ways to do networking in Podman. If you use podman
+in rootful mode and have a bridge already and have Podman 4, you may
+consider using `--network` switch multiple times in `podman run` to
+provide Internet interface and the vintage network.
 
-In case you are running systemd-networkd on the host or some other
-facility which allows you to set custom permanent names for
-interfaces, I suggest you to call the private retro computer network
-`retro`. If not, then you can rename it temporarily by running:
+However, using rootless mode work for this container quite well. We
+are using the default slirp4netns network for Internet access and then
+push one physical (or VLAN) Ethernet adapter to the container. That
+part requires root access, but only once after startup.
 
-```sh
-ip link set name retro dev OLD_NAME
-```
-
-In the following example `retro` is used for both the namespace and
-the Ethernet interface. To create the namespace and move the interface
-there, run:
+To push an Ethernet interface to the rootless container you can use
+script `push-if`. By default it pushes the interface to the last
+container lauched, but you can specify it. To push network interface
+`ethX` to container called `my_retroska`, run:
 
 ```sh
-ip link set name retro dev ethX
-ip netns add retro
-ip link set netns retro dev retro
+./push_if ethX my_retroska
 ```
 
-Also, Internet needs to be provided to the container if you want the
-retro computers to be able to connect to the external world. You can use
-bridge but for simple cases `slirp4netns` is easy enough. Let's launch it:
+It asks the password for sudo. If you've got no sudo, adapt the
+script to your needs.
 
-```sh
-slirp4netns -c --netns-type=path /run/netns/retro internet
-```
+Please keep in mind the interface push lasts only during the
+run-time. In case of VLAN device, Linux destroys the interface. In
+case of physical interface, it returns back to the host use.
 
-Make a script for them since they'll disappear every boot.
-
-**TODO** Provide systemd network and service for them and/or Podman 4
-instructions.
+**TODO** Provide systemd scripts for running the container with the
+network. Test it with Podman 4
 
 ## Architecture
 
@@ -89,3 +80,11 @@ with containers (or without).
 ## Contributing
 
 Please contribute to my design paper: https://demo.hedgedoc.org/3Ev8GPbVTQWT_pdJOudFNQ#
+
+## Kudos
+
+Thanks to [Paul Holzinger](https://github.com/Luap99) for pointing me
+this [Rootless Networking
+presentation](https://podman.io/community/meeting/notes/2021-10-05/Podman-Rootless-Networking.pdf). It
+helped a lot in understanding how to transfer interfaces to
+non-privileged containers.

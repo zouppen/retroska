@@ -1,0 +1,14 @@
+#!/bin/sh -eu
+
+if test "$#" -lt 1 -o "$#" -gt 2 -o "$1" = -h -o "$1" = --help; then
+    cat >&2 <<EOF
+Usage: $0 DEV [CONTAINER]
+
+Moves given network interface to a podman user container.
+If no container specified, last created is used.
+EOF
+    exit 1
+fi
+
+CONTAINER_PID="$(podman container inspect --format '{{.State.Pid}}' "${2---latest}")"
+sudo ip link set netns "$CONTAINER_PID" dev "$1" 
