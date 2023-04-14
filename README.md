@@ -18,14 +18,14 @@ inside the container.
 
 To build and run:
 
-```
+```sh
 podman build -t testi .
-podman run --hostname retroska --cap-add AUDIT_CONTROL,NET_ADMIN,NET_RAW --network=ns:/run/netns/retro -e RETRO_WORKGROUP=RETRO -ti testi
+podman run --rm=true --cap-add AUDIT_CONTROL,NET_ADMIN,NET_RAW --hostname retroska -v retro:/mnt -e RETRO_WORKGROUP=RETRO -ti testi
 ```
 
 **TODO** better instructions.
 
-### Setting up network namespaces
+## Networking
 
 The bare minimum is a physical Ethernet adapter or VLAN interface to
 your vintage network. It is advised to be a segregated network without
@@ -35,18 +35,18 @@ Internet access inside the container is optional but practical; it
 allows reaching online FTP servers and connecting multiple Retroskas
 together for a larger LAN party.
 
-There are multiple ways to do networking in Podman. If you use podman
+There are multiple ways to do networking in Podman. If you use Podman
 in rootful mode and have a bridge already and have Podman 4, you may
 consider using `--network` switch multiple times in `podman run` to
 provide Internet interface and the vintage network.
 
-However, using rootless mode work for this container quite well. We
+However, using rootless mode works for this container quite well. We
 are using the default slirp4netns network for Internet access and then
 push one physical (or VLAN) Ethernet adapter to the container. That
 part requires root access, but only once after startup.
 
 To push an Ethernet interface to the rootless container you can use
-script `push-if`. By default it pushes the interface to the last
+script `push_if`. By default it pushes the interface to the last
 container lauched, but you can specify it. To push network interface
 `ethX` to container called `my_retroska`, run:
 
@@ -54,12 +54,13 @@ container lauched, but you can specify it. To push network interface
 ./push_if ethX my_retroska
 ```
 
-It asks the password for sudo. If you've got no sudo, adapt the
+It asks the password for sudo. If you've got no `sudo`, adapt the
 script to your needs.
 
-Please keep in mind the interface push lasts only during the
-run-time. In case of VLAN device, Linux destroys the interface. In
-case of physical interface, it returns back to the host use.
+Please keep in mind that the interface stays in the container only
+during the execution. In case of VLAN device, Linux destroys the
+interface after container is stopped. In case of physical interface,
+it is returned back to the host.
 
 **TODO** Provide systemd scripts for running the container with the
 network. Test it with Podman 4
