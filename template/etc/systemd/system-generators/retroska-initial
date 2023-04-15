@@ -2,6 +2,10 @@
 
 fqdn="$(hostname).retroska"
 
+# Infer internet interface and put it in nftables conf
+export internet_if="$(ip -j route | jq -r 'map(select(.dst == "default")) | sort_by(.metric // 0) | .[0].dev')"
+sed -i "s/WAN/$internet_if/g" /etc/nftables.conf
+
 # Generate passwords if not provided
 if test -z "${RETRO_IRC_PW+x}"; then
     export RETRO_IRC_PW=`pwgen -B 8`
