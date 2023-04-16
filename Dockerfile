@@ -22,6 +22,7 @@ RUN apt-get -y install --no-install-recommends irssi
 # Move to install-packages part
 RUN apt-get -y install --no-install-recommends nftables dnsmasq dns-root-data
 RUN systemctl enable nftables
+RUN apt-get -y install --no-install-recommends openssh-client
 
 # Volume for public shares and other permanent storage
 VOLUME "/mnt"
