@@ -67,11 +67,10 @@ network. Test it with Podman 4
 
 ## Architecture
 
-Instead of more complex orchestration I've chosen to implement this as
-monolithic container using Podman and systemd. Systemd does good job
-in monitoring process status and in this case I don't even want heavy
-separation of services since for example files are shared multiple
-ways: FTP, Samba among others.
+See [Architecture wiki
+page](https://github.com/zouppen/retroska/wiki/Architecture). It
+describes how containers should be designed and has some community
+guidelines as well.
 
 NB. I'm open for good tips how to use the force of Podman more
 efficiently but don't want to listen to any rants about using systemd
