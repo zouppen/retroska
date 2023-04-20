@@ -6,8 +6,8 @@
 # permissions of pre-existing files.
 
 # Directory permissions
-find "$DIR" -mindepth 1 -type d -print0 | xargs -r0 chmod "$WANTED_PERM_DIR"
+find "$DIR" -xdev -mindepth 1 -type d -print0 | xargs -r0 chmod "$WANTED_PERM_DIR"
 # File permissions
-find "$DIR" -mindepth 1 -type f -print0 | xargs -r0 chmod "$WANTED_PERM_FILE"
+find "$DIR" -xdev -mindepth 1 -type f -print0 | xargs -r0 chmod "$WANTED_PERM_FILE"
 # Ownership
-find "$DIR" -mindepth 1 -type f,d -print0 | xargs -r0 chown "$WANTED_OWNER"
+find "$DIR" -xdev -mindepth 1 -type f,d -print0 | xargs -r0 chown "$WANTED_OWNER"
